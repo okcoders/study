@@ -1,0 +1,23 @@
+{
+  "name": "study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"cd client && npm start\" \"cd server && npx nodemon start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okcoders/study.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okcoders/study/issues"
+  },
+  "homepage": "https://github.com/okcoders/study#readme",
+  "dependencies": {
+    "concurrently": "^5.0.1"
+  }
+}
