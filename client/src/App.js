@@ -20,7 +20,7 @@ function App() {
      
       <AppBar position="static">
         <Toolbar>
-          Study
+          Study Better 
         </Toolbar>
       </AppBar>
       <Container fixed maxWidth="xl">
