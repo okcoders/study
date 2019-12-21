@@ -28,7 +28,7 @@ db.once("open", function() {
 });
 
 app.get("/api/test", (req, res) => {
-  res.json("hello world!");
+  res.json("Hello World");
 });
 
 app.use("/", indexRouter);
