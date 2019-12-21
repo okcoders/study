@@ -7,9 +7,14 @@ import {Container, AppBar, Toolbar, Box} from '@material-ui/core'
 function App() {
   const [message, updateMessage] = useState('default message')
   useEffect(() => {
-    axios.get('/api/test')
+    axios.get( "https://api.github.com/repos/johnmwaura08/express-intro/commits")
+    .then(response => JSON.stringify(response))
     .then(function (response) {
-      updateMessage(response.data)
+      // updateMessage(response.data)
+      console.log(response.data)
+    })
+    .catch(err => {
+      console.log(err)
     })
 
   }, [])
@@ -23,9 +28,9 @@ function App() {
       </AppBar>
       <Container fixed maxWidth="xl">
         <div className="App">
-          <h3>
+          <ul>
             {message}
-          </h3>
+          </ul>
         </div>
       </Container>
     </>
