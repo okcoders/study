@@ -19,5 +19,5 @@ npm run install-all
 then from the root run: 
 
 ```
-npm run dev
+npm run dev tt
 ```
