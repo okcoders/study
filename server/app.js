@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-const mongoose = require("mongoose");
-
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-=======
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -21,7 +10,6 @@ const _ = require('lodash')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const token = require('./github_token')
->>>>>>> origin/master
 
 var app = express();
 //
@@ -35,18 +23,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-<<<<<<< HEAD
-mongoose.connect("mongodb://localhost/study", { useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
-  console.log("connected to mongoose");
-});
-
-app.get("/api/test", (req, res) => {
-  res.json("Hello World");
-});
-=======
 // mongoose.connect('mongodb://localhost/study', {useNewUrlParser: true});
 // const db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
@@ -79,7 +55,6 @@ app.get('/api/github-profile/:username', (req, res) => {
   }).catch(e => console.error(e))
 })
 
->>>>>>> origin/master
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -93,12 +68,8 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-<<<<<<< HEAD
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-=======
   console.error(err)
   res.locals.error = req.app.get('env') === 'development' ? err : {};
->>>>>>> origin/master
 
   // render the error page
   res.status(err.status || 500);
