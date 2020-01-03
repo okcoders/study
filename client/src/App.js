@@ -8,7 +8,7 @@ const nameContainer = document.querySelector(".main__profile-name");
 const unContainer = document.querySelector(".main__profile-username");
 const reposContainer = document.querySelector(".main__profile-repos");
 const urlContainer = document.querySelector(".main__profile-url");
-
+/*
 const fetchUsers = async user => {
   const api_call = await fetch(
     `https://api.github.com/users/${user}?client_id=${client_id}&client_secret=${client_secret}`
@@ -27,16 +27,16 @@ const showData = name => {
     urlContainer.innerHTML = `URL: <span>${res.data.html_url}</span>`;
   });
 };
-
-showData("zmays");
-
+*/
 function App() {
-  const [message, updateMessage] = useState("default message");
+  const [userProfile, updateUserProfile] = useState({});
   useEffect(() => {
-    axios.get("/api/test").then(function(response) {
-      updateMessage(response.data);
+    axios.get("https://api.github.com/users/julesep3").then(function(response) {
+      updateUserProfile(response.data);
     });
   }, []);
+
+  //showData("zmays");
 
   return (
     <>
@@ -45,17 +45,18 @@ function App() {
       </AppBar>
       <Container fixed maxWidth="xl">
         <div className="App">
-          <h3>{message}</h3>
+          <h3>{userProfile.name}</h3>
+          <h3>{userProfile.login}</h3>
+          <h3>{userProfile.public_repos}</h3>
+          <h3>{userProfile.html_url}</h3>
         </div>
       </Container>
 
       <div>
-        <p class="main__profile-name"></p>
-        <p class="main__profile-username"></p>
-      </div>
-      <div>
-        <p class="main__profile-repos"></p>
-        <p class="main__profile-url"></p>
+        <p className="main__profile-name"></p>
+        <p className="main__profile-username"></p>
+        <p className="main__profile-repos"></p>
+        <p className="main__profile-url"></p>
       </div>
     </>
   );
