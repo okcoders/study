@@ -27,12 +27,14 @@ db.once("open", function() {
   console.log("connected to mongoose");
 });
 
+
 app.get("/api/test", (req, res) => {
   res.json("hello world!");
 });
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/api/test", testRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
