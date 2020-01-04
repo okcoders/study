@@ -40,19 +40,54 @@ app.get('/api/github-profile/:username', (req, res) => {
       `https://api.github.com/users/${username}`, 
       {headers: { Authorization: 'token ' + token }}
     ).then(function (profileResponse) {
-      console.log(profileResponse.data)
-      console.log(eventResponse.data)
-      const stub = {
-        name: 'Zach Mays',
-        login: 'zmays',
-        followers: 100000,
-        public_repos: 20,
-        avatar_url: 'https://avatars0.githubusercontent.com/u/4370615?v=4',
-        commitMessages: ['test']
+      const profile = profileResponse.data
+      const parsed = eventResponse.data.filter(d => d.type === "PushEvent").map(d => d.payload.commits)
+      const flattened = _.flatten(parsed)
+      const latestCommits = flattened.map(d => d.message)
+      const responseData = {
+        name: profile.name,
+        login: profile.login,
+        followers: profile.followers,
+        public_repos: profile.public_repos,
+        avatar_url: profile.avatar_url,
+        commitMessages: latestCommits
       }
-      res.json(stub)
+      res.json(responseData)
     })
   }).catch(e => console.error(e))
+})
+
+async function getProfileAndEvents(username) {
+  const eventResponse = await axios.get(
+    `https://api.github.com/users/${username}/events`, 
+    {headers: { Authorization: 'token ' + token }})
+
+  const profileResponse = await axios.get(
+      `https://api.github.com/users/${username}`, 
+      {headers: { Authorization: 'token ' + token }})
+
+  const profile = profileResponse.data
+  const pushEvents = eventResponse.data.filter(d => d.type === "PushEvent")
+  const parsed = pushEvents.map(pushEvent => {
+    return pushEvent.payload.commits.map(commit => ({...commit, createdAt: pushEvent.created_at}))
+  })
+  const flattened = _.flatten(parsed)
+  const latestCommitDate = flattened.map(c => new Date(c.createdAt)).sort((a, b) => b - a)[0]
+  console.log(profile)
+  const responseData = {
+    name: profile.name,
+    username: profile.login,
+    numberOfCommits: flattened.length,
+    latestCommitDate
+  }
+  return responseData
+}
+
+app.get('/api/github-profiles', async (req, res) => {
+  const usernames = ['zmays', 'almills1972', 'hamza-zoumhani', 'johnmwaura08', 'julesep3', 'rbaptiste23', 'robdacoda']
+  const usernamePromises = usernames.map(getProfileAndEvents)
+  const data = await Promise.all(usernamePromises)
+  res.json(data)
 })
 
 
