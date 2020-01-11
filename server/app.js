@@ -73,7 +73,6 @@ async function getProfileAndEvents(username) {
   })
   const flattened = _.flatten(parsed)
   const latestCommitDate = flattened.map(c => new Date(c.createdAt)).sort((a, b) => b - a)[0]
-  console.log(profile)
   const responseData = {
     name: profile.name,
     username: profile.login,
@@ -87,6 +86,7 @@ app.get('/api/github-profiles', async (req, res) => {
   const usernames = ['zmays', 'almills1972', 'hamza-zoumhani', 'johnmwaura08', 'julesep3', 'rbaptiste23', 'robdacoda']
   const usernamePromises = usernames.map(getProfileAndEvents)
   const data = await Promise.all(usernamePromises)
+  console.log(data)
   res.json(data)
 })
 
