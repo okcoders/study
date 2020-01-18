@@ -12,7 +12,8 @@ var usersRouter = require('./routes/users');
 const token = require('./github_token')
 
 var app = express();
-
+//testing out the pull request
+//
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -23,12 +24,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// mongoose.connect('mongodb://localhost/study', {useNewUrlParser: true});
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//   console.log('connected to mongoose')
-// });
+mongoose.connect('mongodb://localhost/study', {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('connected to mongoose')
+});
+
+const moduleSchema = new Schema ({ name: string},{collection: data})
 
 app.get('/api/github-profile/:username', (req, res) => {
   const username = req.params.username
@@ -73,7 +76,6 @@ async function getProfileAndEvents(username) {
   })
   const flattened = _.flatten(parsed)
   const latestCommitDate = flattened.map(c => new Date(c.createdAt)).sort((a, b) => b - a)[0]
-  console.log(profile)
   const responseData = {
     name: profile.name,
     username: profile.login,
@@ -87,6 +89,7 @@ app.get('/api/github-profiles', async (req, res) => {
   const usernames = ['zmays', 'almills1972', 'hamza-zoumhani', 'johnmwaura08', 'julesep3', 'rbaptiste23', 'robdacoda']
   const usernamePromises = usernames.map(getProfileAndEvents)
   const data = await Promise.all(usernamePromises)
+  console.log(data)
   res.json(data)
 })
 
