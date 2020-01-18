@@ -23,12 +23,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// mongoose.connect('mongodb://localhost/study', {useNewUrlParser: true});
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//   console.log('connected to mongoose')
-// });
+mongoose.connect('mongodb://localhost/study', {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('connected to mongoose')
+});
+
+const moduleModel = mongoose.model('modules', {name: String, usernames: [String]}, 'modules');
 
 app.get('/api/github-profile/:username', (req, res) => {
   const username = req.params.username
@@ -83,11 +85,16 @@ async function getProfileAndEvents(username) {
 }
 
 app.get('/api/github-profiles', async (req, res) => {
-  const usernames = ['zmays', 'almills1972', 'hamza-zoumhani', 'johnmwaura08', 'julesep3', 'rbaptiste23', 'robdacoda']
-  const usernamePromises = usernames.map(getProfileAndEvents)
-  const data = await Promise.all(usernamePromises)
-  console.log(data)
-  res.json(data)
+  moduleModel.find({}).sort({'_id': -1}).limit(1).exec(async (err, docs) => {
+    if (err) {
+      console.log(err)
+    }
+    const usernames = docs[0].usernames
+    const usernamePromises = usernames.map(getProfileAndEvents)
+    const data = await Promise.all(usernamePromises)
+    console.log(data)
+    res.json(data)
+  })
 })
 
 
