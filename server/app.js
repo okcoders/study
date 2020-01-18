@@ -59,6 +59,8 @@ app.get('/api/github-profile/:username', (req, res) => {
   }).catch(e => console.error(e))
 })
 
+//test
+
 async function getProfileAndEvents(username) {
   const eventResponse = await axios.get(
     `https://api.github.com/users/${username}/events`, 
